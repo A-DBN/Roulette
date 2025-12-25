@@ -4,310 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Roue de tirage</title>
-  <style>
-    :root{
-      --bg:#0b0d12;
-      --card:#121622;
-      --card2:#0f1320;
-      --text:#e9ecf1;
-      --muted:#a8b0bf;
-      --border:rgba(255,255,255,.10);
-      --accent:#7aa2ff;
-      --danger:#ff5f7a;
-      --ok:#33d69f;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-      --gap:14px;
-    }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:var(--text);
-      background: radial-gradient(1200px 800px at 30% 10%, rgba(122,162,255,.18), transparent 55%),
-                  radial-gradient(900px 700px at 80% 30%, rgba(51,214,159,.14), transparent 55%),
-                  var(--bg);
-    }
-
-    header{
-      padding:14px 14px 0 14px;
-      max-width:1100px;
-      margin:0 auto;
-    }
-    header .top{
-      display:flex;
-      gap:10px;
-      align-items:flex-end;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    h1{
-      font-size:18px;
-      margin:0;
-      font-weight:700;
-      letter-spacing:.2px;
-    }
-    .sub{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:4px;
-    }
-
-    main{
-      padding:14px;
-      max-width:1100px;
-      margin:0 auto 18px auto;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-    }
-
-    /* Desktop: roue + panneau */
-    @media (min-width: 900px){
-      main{
-        grid-template-columns: 1.05fr .95fr;
-        align-items:start;
-      }
-    }
-
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-
-    .card .hd{
-      padding:12px 12px 10px 12px;
-      border-bottom:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .card .hd .title{
-      font-weight:700;
-      font-size:13px;
-      letter-spacing:.2px;
-      color:var(--text);
-    }
-    .card .bd{ padding:12px; }
-
-    .wheel-wrap{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      align-items:center;
-      padding:12px;
-    }
-
-    .wheel-area{
-      width: min(86vw, 460px);
-      aspect-ratio: 1/1;
-      position:relative;
-      display:grid;
-      place-items:center;
-    }
-    canvas{
-      width:100%;
-      height:100%;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.05), rgba(255,255,255,.02));
-      border:1px solid var(--border);
-    }
-
-    .pointer{
-      position:absolute;
-      top:-2px;
-      left:50%;
-      transform:translateX(-50%);
-      width:0;height:0;
-      border-left:14px solid transparent;
-      border-right:14px solid transparent;
-      border-top:24px solid rgba(255,255,255,.9);
-      filter: drop-shadow(0 8px 10px rgba(0,0,0,.45));
-    }
-    .center-cap{
-      position:absolute;
-      width:16%;
-      aspect-ratio:1/1;
-      border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), rgba(255,255,255,.10));
-      border:1px solid var(--border);
-      box-shadow: 0 12px 24px rgba(0,0,0,.35);
-      display:grid;
-      place-items:center;
-      font-weight:800;
-      letter-spacing:.4px;
-      color:rgba(255,255,255,.85);
-      user-select:none;
-    }
-
-    .result{
-      width:100%;
-      text-align:center;
-      padding:12px;
-      border-radius:16px;
-      background: rgba(255,255,255,.03);
-      border:1px dashed rgba(255,255,255,.14);
-    }
-    .result .label{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
-    }
-    .result .name{
-      font-size: clamp(22px, 4.2vw, 34px);
-      font-weight:900;
-      letter-spacing:.3px;
-      line-height:1.15;
-      word-break: break-word;
-    }
-
-    .btns{
-      width:100%;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    button{
-      appearance:none;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:14px;
-      font-weight:700;
-      font-size:13px;
-      cursor:pointer;
-      transition: transform .06s ease, background .2s ease, border-color .2s ease, opacity .2s ease;
-      user-select:none;
-      touch-action: manipulation;
-    }
-    button:active{ transform: translateY(1px) scale(.99); }
-    button.primary{
-      background: linear-gradient(180deg, rgba(122,162,255,.22), rgba(122,162,255,.12));
-      border-color: rgba(122,162,255,.35);
-    }
-    button.danger{
-      background: linear-gradient(180deg, rgba(255,95,122,.20), rgba(255,95,122,.10));
-      border-color: rgba(255,95,122,.32);
-    }
-    button.ok{
-      background: linear-gradient(180deg, rgba(51,214,159,.20), rgba(51,214,159,.10));
-      border-color: rgba(51,214,159,.32);
-    }
-    button:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap: var(--gap);
-    }
-    @media(min-width: 900px){
-      .grid{ grid-template-columns:1fr; }
-    }
-
-    .row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-
-    input[type="text"]{
-      width:100%;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-      font-weight:600;
-    }
-    input[type="text"]::placeholder{ color: rgba(168,176,191,.75); }
-
-    .names{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:10px;
-    }
-    .name-item{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:10px;
-      align-items:center;
-    }
-    .small{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    .saved{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-    .saved-item{
-      display:grid;
-      grid-template-columns: 1fr auto;
-      gap:10px;
-      align-items:center;
-      padding:10px;
-      border-radius:14px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-    }
-    .saved-item .meta{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-      min-width:0;
-    }
-    .saved-item .meta .n{
-      font-weight:800;
-      font-size:13px;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .saved-item .meta .c{
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    footer{
-      max-width:1100px;
-      margin:0 auto;
-      padding:0 14px 18px 14px;
-      color:rgba(168,176,191,.7);
-      font-size:11px;
-    }
-
-    .pill{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.03);
-      font-weight:700;
-      font-size:11px;
-      color:rgba(233,236,241,.85);
-    }
-  </style>
+  <link rel="stylesheet" href="./src/styles/main.css" />
 </head>
+
 <body>
   <header>
     <div class="top">
-      <div>
-        <h1>Roue de tirage</h1>
-      </div>
+      <div><h1>Roue de tirage</h1></div>
       <div class="pill" id="statsPill">0 nom</div>
     </div>
   </header>
@@ -319,16 +23,16 @@
         <div class="title">Roue</div>
         <div class="small" id="wheelInfo">—</div>
       </div>
+
       <div class="wheel-wrap">
         <div class="wheel-area">
           <div class="pointer" aria-hidden="true"></div>
           <canvas id="wheel" width="900" height="900"></canvas>
-          <div class="center-cap" aria-hidden="true">GO</div>
+          <div class="center-cap clickable" id="centerGo" role="button" aria-label="Lancer la roue">GO</div>
         </div>
 
         <div class="btns">
           <button class="primary" id="spinBtn">Lancer 🎯</button>
-          <button id="rerollBtn" title="Relancer rapidement">Relancer</button>
           <button class="danger" id="resetResultBtn" title="Effacer le résultat">Effacer résultat</button>
         </div>
 
@@ -342,11 +46,15 @@
     <!-- Panneau -->
     <section class="grid">
       <!-- Noms -->
-      <section class="card">
-        <div class="hd">
+      <section class="card collapsible" data-panel="names">
+        <div class="hd collapsible-hd" data-panel="names" role="button" tabindex="0" aria-expanded="true">
           <div class="title">Noms</div>
-          <button class="ok" id="addNameBtn">+ Ajouter</button>
+          <div class="hd-right">
+            <button class="ok" id="addNameBtn">+ Ajouter</button>
+            <span class="chev" aria-hidden="true"></span>
+          </div>
         </div>
+
         <div class="bd">
           <div class="row">
             <input id="newName" type="text" placeholder="Ex: Antoine" />
@@ -364,23 +72,138 @@
         </div>
       </section>
 
-      <!-- Roues sauvegardées -->
-      <section class="card">
-        <div class="hd">
-          <div class="title">Roues sauvegardées</div>
-          <button class="ok" id="saveWheelBtn">Sauvegarder</button>
+      <!-- Son -->
+      <section class="card collapsible" data-panel="sound">
+        <div class="hd collapsible-hd" data-panel="sound" role="button" tabindex="0" aria-expanded="true">
+          <div class="title">Son</div>
+          <div class="hd-right">
+            <button id="testSoundBtn">Tester 🔊</button>
+            <span class="chev" aria-hidden="true"></span>
+          </div>
         </div>
+
+        <div class="bd">
+          <div class="two-cols">
+            <div>
+              <div class="small" style="margin-bottom:6px;">Son pendant la rotation</div>
+              <select id="spinSoundSelect">
+                <option value="none">Aucun</option>
+                <option value="tick">Tick (léger)</option>
+                <option value="roulette">Roulette (plus rond)</option>
+              </select>
+            </div>
+
+            <div>
+              <div class="small" style="margin-bottom:6px;">Son à la fin</div>
+              <select id="winSoundSelect">
+                <option value="none">Aucun</option>
+                <option value="chime">Chime (ding)</option>
+                <option value="pop">Pop</option>
+                <option value="__add__">Ajouter un son…</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- input file caché (ouvert quand "Ajouter un son…" est choisi) -->
+          <input id="customSoundFile" type="file" accept="audio/*" style="display:none;" />
+
+          <div class="small" id="customSoundStatus" style="margin-top:10px;">
+            “Ajouter un son…” sert uniquement à importer. Il n’est jamais joué.
+          </div>
+
+          <div class="sound-list" id="customSoundsList"></div>
+
+          <div style="margin-top:12px;">
+            <div class="small" style="margin-bottom:6px;">Volume</div>
+            <input id="volumeRange" type="range" min="0" max="100" value="65" />
+          </div>
+
+          <div class="small" style="margin-top:10px;">
+            Note : sur mobile, le son ne peut démarrer qu’après une interaction utilisateur (clic/tap). Ici c’est OK via GO / Lancer.
+          </div>
+        </div>
+      </section>
+
+      <!-- Roues sauvegardées -->
+      <section class="card collapsible" data-panel="saved">
+        <div class="hd collapsible-hd" data-panel="saved" role="button" tabindex="0" aria-expanded="true">
+          <div class="title">Roues sauvegardées</div>
+          <div class="hd-right">
+            <button class="ok" id="saveWheelBtn">Sauvegarder</button>
+            <span class="chev" aria-hidden="true"></span>
+          </div>
+        </div>
+
         <div class="bd">
           <input id="wheelName" type="text" placeholder="Nom de la roue (ex: Soirée Noël)" />
           <div class="small" style="margin-top:8px;">
-            Sauvegardé localement dans ton navigateur. Tu peux exporter/importer le JSON si besoin.
+            Sauvegardé localement dans ton navigateur. Export ZIP = transfert vers un autre appareil.
           </div>
 
           <div class="row" style="margin-top:12px;">
-            <button id="exportBtn">Exporter JSON</button>
-            <button id="importBtn">Importer JSON</button>
+            <button id="exportZipBtn">Exporter ZIP</button>
+            <button id="importZipBtn">Importer ZIP</button>
             <button class="danger" id="clearSavedBtn">Tout supprimer</button>
           </div>
+
+          <!-- Options export -->
+          <div class="export-box" id="exportBox">
+            <div class="small"><b>Options d’export ZIP</b></div>
+
+            <div class="checks">
+              <label class="opt">
+                <input type="radio" name="zipScope" id="zipScopeAll" value="all" checked>
+                <div>
+                  <div style="font-weight:800;">Toutes les roues sauvegardées</div>
+                  <div class="small">Export complet des roues déjà sauvegardées.</div>
+                </div>
+              </label>
+
+              <label class="opt">
+                <input type="radio" name="zipScope" id="zipScopeCurrent" value="current">
+                <div>
+                  <div style="font-weight:800;">Uniquement la roue actuelle</div>
+                  <div class="small">Export les noms actuellement dans la roue (même si non sauvegardée).</div>
+                </div>
+              </label>
+
+              <label class="opt">
+                <input type="radio" name="zipScope" id="zipScopeSelect" value="select">
+                <div>
+                  <div style="font-weight:800;">Sélection (une ou plusieurs roues)</div>
+                  <div class="small">Tu coches les roues à exporter juste en dessous.</div>
+                </div>
+              </label>
+
+              <label class="opt" style="align-items:center;">
+                <input type="checkbox" id="zipIncludeSounds" checked>
+                <div>
+                  <div style="font-weight:800;">Inclure les sons uploadés</div>
+                  <div class="small">Les sons persos seront copiés dans le ZIP.</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="wheel-pick" id="wheelPickBox">
+              <div class="small"><b>Roulettes à inclure</b> (mode “Sélection”)</div>
+              <div class="row" style="margin-top:8px;">
+                <button id="pickAllBtn">Tout cocher</button>
+                <button id="pickNoneBtn">Tout décocher</button>
+              </div>
+              <div class="list" id="wheelPickList"></div>
+            </div>
+
+            <div class="row" style="margin-top:10px;">
+              <button class="ok" id="doExportZipBtn">Télécharger le ZIP</button>
+              <button class="danger" id="cancelExportZipBtn">Annuler</button>
+            </div>
+
+            <div class="small" style="margin-top:8px;">
+              Contenu ZIP : <b>data/storage.json</b> (+ <b>sounds/</b> si activé).
+            </div>
+          </div>
+
+          <input id="zipFileInput" type="file" accept=".zip,application/zip" style="display:none;" />
 
           <div class="saved" id="savedList" style="margin-top:12px;"></div>
         </div>
@@ -388,510 +211,10 @@
     </section>
   </main>
 
-
-  <script>
-    /**
-     * Stockage (JSON) dans localStorage
-     * Structure:
-     * {
-     *   version: 1,
-     *   wheels: [{ id, name, names: string[], updatedAt }]
-     * }
-     */
-    const STORAGE_KEY = "simple_wheel_storage_v1";
-
-    const $ = (sel) => document.querySelector(sel);
-    const wheelCanvas = $("#wheel");
-    const ctx = wheelCanvas.getContext("2d");
-
-    const spinBtn = $("#spinBtn");
-    const rerollBtn = $("#rerollBtn");
-    const resetResultBtn = $("#resetResultBtn");
-
-    const newNameInput = $("#newName");
-    const addNameBtn = $("#addNameBtn");
-    const clearNamesBtn = $("#clearNamesBtn");
-    const shuffleNamesBtn = $("#shuffleNamesBtn");
-
-    const namesListEl = $("#namesList");
-    const resultNameEl = $("#resultName");
-    const statsPill = $("#statsPill");
-    const wheelInfo = $("#wheelInfo");
-
-    const wheelNameInput = $("#wheelName");
-    const saveWheelBtn = $("#saveWheelBtn");
-    const savedListEl = $("#savedList");
-    const exportBtn = $("#exportBtn");
-    const importBtn = $("#importBtn");
-    const clearSavedBtn = $("#clearSavedBtn");
-
-    // Etat courant
-    let names = ["Antoine", "Julie", "Max", "Sarah"];
-    let storage = loadStorage();
-    let rotation = 0; // radians
-    let spinning = false;
-    let lastWinner = null;
-
-    // ------------ Utils stockage ------------
-    function loadStorage(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) return { version:1, wheels:[] };
-        const parsed = JSON.parse(raw);
-        if(!parsed || typeof parsed !== "object") throw new Error("bad json");
-        if(!Array.isArray(parsed.wheels)) parsed.wheels = [];
-        if(!parsed.version) parsed.version = 1;
-        return parsed;
-      }catch(e){
-        return { version:1, wheels:[] };
-      }
-    }
-    function saveStorage(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(storage));
-    }
-    function uid(){
-      return Math.random().toString(16).slice(2) + Date.now().toString(16);
-    }
-    function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
-    function pickRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-    function shuffle(arr){
-      const a = [...arr];
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]]=[a[j],a[i]];
-      }
-      return a;
-    }
-    function formatDate(ts){
-      const d = new Date(ts);
-      return d.toLocaleString(undefined, { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-    }
-
-    // ------------ Rendu UI ------------
-    function renderNames(){
-      namesListEl.innerHTML = "";
-      names.forEach((n, idx) => {
-        const row = document.createElement("div");
-        row.className = "name-item";
-
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = n;
-        input.placeholder = "Nom";
-        input.addEventListener("input", () => {
-          names[idx] = input.value;
-          drawWheel();
-          updateStats();
-        });
-
-        const del = document.createElement("button");
-        del.className = "danger";
-        del.textContent = "Suppr.";
-        del.addEventListener("click", () => {
-          names.splice(idx, 1);
-          drawWheel();
-          renderNames();
-          updateStats();
-        });
-
-        row.appendChild(input);
-        row.appendChild(del);
-        namesListEl.appendChild(row);
-      });
-
-      if(names.length === 0){
-        const empty = document.createElement("div");
-        empty.className = "small";
-        empty.textContent = "Ajoute des noms pour pouvoir lancer la roue.";
-        namesListEl.appendChild(empty);
-      }
-    }
-
-    function renderSaved(){
-      savedListEl.innerHTML = "";
-      if(storage.wheels.length === 0){
-        const empty = document.createElement("div");
-        empty.className = "small";
-        empty.textContent = "Aucune roue sauvegardée pour l’instant.";
-        savedListEl.appendChild(empty);
-        return;
-      }
-
-      // Tri: plus récent en premier
-      const wheels = [...storage.wheels].sort((a,b)=> (b.updatedAt||0) - (a.updatedAt||0));
-
-      wheels.forEach(w => {
-        const item = document.createElement("div");
-        item.className = "saved-item";
-
-        const meta = document.createElement("div");
-        meta.className = "meta";
-
-        const title = document.createElement("div");
-        title.className = "n";
-        title.textContent = w.name || "(Sans nom)";
-
-        const count = document.createElement("div");
-        count.className = "c";
-        count.textContent = `${(w.names||[]).length} nom(s) • modifié ${formatDate(w.updatedAt || Date.now())}`;
-
-        meta.appendChild(title);
-        meta.appendChild(count);
-
-        const actions = document.createElement("div");
-        actions.style.display="flex";
-        actions.style.gap="8px";
-
-        const loadBtn = document.createElement("button");
-        loadBtn.textContent = "Charger";
-        loadBtn.addEventListener("click", () => {
-          names = (w.names || []).slice(0, 200); // limite simple
-          wheelNameInput.value = w.name || "";
-          lastWinner = null;
-          setResult("—");
-          rotation = 0;
-          drawWheel();
-          renderNames();
-          updateStats();
-        });
-
-        const delBtn = document.createElement("button");
-        delBtn.className = "danger";
-        delBtn.textContent = "Suppr.";
-        delBtn.addEventListener("click", () => {
-          storage.wheels = storage.wheels.filter(x => x.id !== w.id);
-          saveStorage();
-          renderSaved();
-        });
-
-        actions.appendChild(loadBtn);
-        actions.appendChild(delBtn);
-
-        item.appendChild(meta);
-        item.appendChild(actions);
-        savedListEl.appendChild(item);
-      });
-    }
-
-    function updateStats(){
-      const clean = names.map(x => (x||"").trim()).filter(Boolean);
-      statsPill.textContent = `${clean.length} nom${clean.length>1?"s":""}`;
-      wheelInfo.textContent = clean.length >= 2 ? "Prêt ✅" : (clean.length === 1 ? "Ajoute au moins 2 noms" : "Ajoute des noms");
-      spinBtn.disabled = spinning || clean.length < 2;
-      rerollBtn.disabled = spinning || clean.length < 2;
-    }
-
-    function setResult(name){
-      resultNameEl.textContent = name;
-    }
-
-    // ------------ Dessin roue ------------
-    function hashColor(i, total){
-      // Couleur stable par index (HSL) -> jolie sans librairie
-      const hue = Math.round((i / Math.max(1,total)) * 360);
-      return `hsl(${hue}, 70%, 55%)`;
-    }
-
-    function drawWheel(){
-      const clean = names.map(x => (x||"").trim()).filter(Boolean);
-      const total = clean.length;
-
-      const W = wheelCanvas.width, H = wheelCanvas.height;
-      ctx.clearRect(0,0,W,H);
-
-      // Fond
-      const cx = W/2, cy = H/2;
-      const r = Math.min(W,H)*0.46;
-
-      // cercle extérieur
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(rotation);
-
-      if(total === 0){
-        ctx.beginPath();
-        ctx.arc(0,0,r,0,Math.PI*2);
-        ctx.fillStyle = "rgba(255,255,255,.06)";
-        ctx.fill();
-        ctx.strokeStyle = "rgba(255,255,255,.14)";
-        ctx.lineWidth = 6;
-        ctx.stroke();
-
-        ctx.fillStyle = "rgba(233,236,241,.9)";
-        ctx.font = "700 44px ui-sans-serif, system-ui";
-        ctx.textAlign="center";
-        ctx.textBaseline="middle";
-        ctx.fillText("Ajoute des noms", 0, 0);
-        ctx.restore();
-        return;
-      }
-
-      const slice = (Math.PI*2) / total;
-      for(let i=0;i<total;i++){
-        const start = i*slice;
-        const end = start + slice;
-
-        // part
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.arc(0,0,r,start,end);
-        ctx.closePath();
-        ctx.fillStyle = hashColor(i, total);
-        ctx.globalAlpha = 0.92;
-        ctx.fill();
-
-        // séparation
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = "rgba(0,0,0,.25)";
-        ctx.lineWidth = 4;
-        ctx.stroke();
-
-        // texte
-        const mid = start + slice/2;
-        ctx.save();
-        ctx.rotate(mid);
-        ctx.translate(r*0.62, 0);
-
-        // taille adaptative
-        const txt = clean[i];
-        const base = clamp(44 - total*1.2, 18, 40);
-        ctx.fillStyle = "rgba(10,12,18,.92)";
-        ctx.font = `900 ${base}px ui-sans-serif, system-ui`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-
-        // petit fond pour lisibilité
-        const padX = 14, padY = 10;
-        const metrics = ctx.measureText(txt);
-        const bw = clamp(metrics.width + padX*2, 80, r*1.0);
-        const bh = base + padY*2;
-        ctx.fillStyle = "rgba(255,255,255,.78)";
-        roundRect(ctx, -bw/2, -bh/2, bw, bh, 18);
-        ctx.fill();
-
-        ctx.fillStyle = "rgba(10,12,18,.92)";
-        ctx.fillText(ellipsize(txt, 16), 0, 0);
-
-        ctx.restore();
-      }
-
-      // cercle extérieur / reflet
-      ctx.beginPath();
-      ctx.arc(0,0,r,0,Math.PI*2);
-      ctx.strokeStyle = "rgba(255,255,255,.22)";
-      ctx.lineWidth = 10;
-      ctx.stroke();
-
-      // reflet subtil
-      const grad = ctx.createRadialGradient(-r*0.3, -r*0.35, r*0.1, 0, 0, r);
-      grad.addColorStop(0, "rgba(255,255,255,.22)");
-      grad.addColorStop(0.6, "rgba(255,255,255,.05)");
-      grad.addColorStop(1, "rgba(255,255,255,0)");
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(0,0,r,0,Math.PI*2);
-      ctx.fill();
-
-      ctx.restore();
-    }
-
-    function roundRect(c,x,y,w,h,r){
-      const rr = Math.min(r, w/2, h/2);
-      c.beginPath();
-      c.moveTo(x+rr, y);
-      c.arcTo(x+w, y, x+w, y+h, rr);
-      c.arcTo(x+w, y+h, x, y+h, rr);
-      c.arcTo(x, y+h, x, y, rr);
-      c.arcTo(x, y, x+w, y, rr);
-      c.closePath();
-    }
-
-    function ellipsize(s, max){
-      const t = (s||"").trim();
-      if(t.length <= max) return t;
-      return t.slice(0, max-1) + "…";
-    }
-
-    // ------------ Tirage / animation ------------
-    function getWinnerIndex(cleanNames, finalRotation){
-      // Le pointeur est en haut (angle -90° par rapport à l’axe x)
-      // On veut savoir quel segment se trouve sous le pointeur (angle global = -PI/2)
-      const total = cleanNames.length;
-      const slice = (Math.PI*2)/total;
-
-      // angle "réel" du pointeur dans le repère de la roue
-      // roue tournée de finalRotation => on "retire" la rotation
-      let a = (-Math.PI/2 - finalRotation) % (Math.PI*2);
-      if(a < 0) a += Math.PI*2;
-
-      // segments sont [0..slice), [slice..2slice) etc.
-      const idx = Math.floor(a / slice);
-      return clamp(idx, 0, total-1);
-    }
-
-    function spin(){
-      const clean = names.map(x => (x||"").trim()).filter(Boolean);
-      if(clean.length < 2 || spinning) return;
-
-      spinning = true;
-      updateStats();
-
-      // cible aléatoire + durée 2-3s
-      const duration = 2200 + Math.random()*900; // 2.2s - 3.1s
-      const start = performance.now();
-      const startRot = rotation;
-
-      // Beaucoup de tours + offset aléatoire
-      const extraTurns = 6 + Math.random()*4; // 6-10 tours
-      const targetOffset = Math.random() * Math.PI*2;
-      const targetRot = startRot + extraTurns * Math.PI*2 + targetOffset;
-
-      function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
-
-      const tick = (now) => {
-        const t = clamp((now - start)/duration, 0, 1);
-        const eased = easeOutCubic(t);
-        rotation = startRot + (targetRot - startRot) * eased;
-        drawWheel();
-
-        if(t < 1){
-          requestAnimationFrame(tick);
-        }else{
-          spinning = false;
-          updateStats();
-
-          const winnerIdx = getWinnerIndex(clean, rotation);
-          const winner = clean[winnerIdx];
-          lastWinner = winner;
-          setResult(winner);
-        }
-      };
-      requestAnimationFrame(tick);
-    }
-
-    // ------------ Events ------------
-    addNameBtn.addEventListener("click", () => {
-      const v = (newNameInput.value || "").trim();
-      if(!v) return;
-      names.push(v);
-      newNameInput.value = "";
-      renderNames();
-      drawWheel();
-      updateStats();
-      newNameInput.focus();
-    });
-
-    newNameInput.addEventListener("keydown", (e) => {
-      if(e.key === "Enter"){
-        addNameBtn.click();
-      }
-    });
-
-    clearNamesBtn.addEventListener("click", () => {
-      names = [];
-      lastWinner = null;
-      setResult("—");
-      rotation = 0;
-      renderNames();
-      drawWheel();
-      updateStats();
-    });
-
-    shuffleNamesBtn.addEventListener("click", () => {
-      names = shuffle(names);
-      renderNames();
-      drawWheel();
-      updateStats();
-    });
-
-    spinBtn.addEventListener("click", spin);
-    rerollBtn.addEventListener("click", spin);
-    resetResultBtn.addEventListener("click", () => {
-      lastWinner = null;
-      setResult("—");
-    });
-
-    saveWheelBtn.addEventListener("click", () => {
-      const clean = names.map(x => (x||"").trim()).filter(Boolean);
-      if(clean.length === 0) return;
-
-      const name = (wheelNameInput.value || "").trim() || "Roue";
-      const existing = storage.wheels.find(w => (w.name || "").trim().toLowerCase() === name.toLowerCase());
-
-      if(existing){
-        existing.names = clean;
-        existing.updatedAt = Date.now();
-      }else{
-        storage.wheels.push({ id: uid(), name, names: clean, updatedAt: Date.now() });
-      }
-      saveStorage();
-      renderSaved();
-    });
-
-    clearSavedBtn.addEventListener("click", () => {
-      storage.wheels = [];
-      saveStorage();
-      renderSaved();
-    });
-
-    exportBtn.addEventListener("click", async () => {
-      // Export du JSON
-      const data = JSON.stringify(storage, null, 2);
-      try{
-        await navigator.clipboard.writeText(data);
-        alert("JSON copié dans le presse-papiers ✅");
-      }catch{
-        // fallback: prompt
-        prompt("Copie le JSON :", data);
-      }
-    });
-
-    importBtn.addEventListener("click", () => {
-      const raw = prompt("Colle ici le JSON exporté :");
-      if(!raw) return;
-      try{
-        const parsed = JSON.parse(raw);
-        if(!parsed || typeof parsed !== "object" || !Array.isArray(parsed.wheels)){
-          alert("JSON invalide (attendu: { wheels: [...] })");
-          return;
-        }
-        // petite normalisation
-        parsed.version = 1;
-        parsed.wheels = parsed.wheels.map(w => ({
-          id: w.id || uid(),
-          name: (w.name || "Roue").toString(),
-          names: Array.isArray(w.names) ? w.names.map(x => (x||"").toString()) : [],
-          updatedAt: w.updatedAt || Date.now()
-        }));
-        storage = parsed;
-        saveStorage();
-        renderSaved();
-        alert("Import OK ✅");
-      }catch(e){
-        alert("Impossible de parser le JSON.");
-      }
-    });
-
-    // ------------ Init ------------
-    function init(){
-      // Si une dernière roue sauvegardée existe, on peut charger la plus récente
-      if(storage.wheels.length){
-        const latest = [...storage.wheels].sort((a,b)=> (b.updatedAt||0)-(a.updatedAt||0))[0];
-        if(latest?.names?.length){
-          names = latest.names.slice(0,200);
-          wheelNameInput.value = latest.name || "";
-        }
-      }
-      renderNames();
-      renderSaved();
-      drawWheel();
-      updateStats();
-      setResult("—");
-
-      // Redraw au resize (canvas est responsive via CSS mais on garde un bon rendu)
-      window.addEventListener("resize", () => drawWheel(), { passive:true });
-    }
-    init();
-  </script>
+  <!-- JSZip (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+  <!-- App -->
+  <script type="module" src="./src/js/app.js"></script>
 </body>
 </html>
