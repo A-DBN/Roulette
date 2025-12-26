@@ -6,6 +6,9 @@ export function getEls(){
     spinBtn: $("#spinBtn"),
     resetResultBtn: $("#resetResultBtn"),
     centerGo: $("#centerGo"),
+    spinDurationRange: $("#spinDurationRange"),
+  spinDurationValue: $("#spinDurationValue"),
+
 
     newNameInput: $("#newName"),
     addNameBtn: $("#addNameBtn"),

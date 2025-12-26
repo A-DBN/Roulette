@@ -9,6 +9,7 @@ export function freshStorage(){
       winSound:"chime",
       volume:65,
       customSounds:[],
+      spinDurationMs: 2800,
       panels:{ names:true, sound:true, saved:true }
     }
   };
@@ -27,6 +28,7 @@ export function loadStorage(){
     if(!parsed.settings.spinSound) parsed.settings.spinSound = "tick";
     if(!parsed.settings.winSound) parsed.settings.winSound = "chime";
     if(parsed.settings.volume == null) parsed.settings.volume = 65;
+    if(parsed.settings.spinDurationMs == null) parsed.settings.spinDurationMs = 2800;
     return parsed;
   }catch{
     return freshStorage();

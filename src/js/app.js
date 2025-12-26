@@ -32,16 +32,27 @@ function cleanNames(arr){
   return arr.map(x => (x||"").trim()).filter(Boolean);
 }
 
+function getSpinDurationMs(){
+  const v = Number(storageRef.value.settings?.spinDurationMs ?? 2800);
+  return clamp(v, 800, 15000); // sécurité
+}
+
 function updateStats(){
   const clean = cleanNames(names);
   els.statsPill.textContent = `${clean.length} nom${clean.length>1?"s":""}`;
   els.wheelInfo.textContent = clean.length >= 2 ? "Prêt ✅" : (clean.length === 1 ? "Ajoute au moins 2 noms" : "Ajoute des noms");
 
-  const disabled = spinning || clean.length < 2;
-  els.spinBtn.disabled = disabled;
+    const disabled = spinning || clean.length < 2;
+    els.spinBtn.disabled = disabled;
 
-  els.centerGo.style.opacity = disabled ? "0.5" : "1";
-  els.centerGo.style.pointerEvents = disabled ? "none" : "auto";
+    if(clean.length < 2){
+      els.centerGo.style.display = "none";
+    }else{
+      els.centerGo.style.display = "grid";
+    }
+
+    els.centerGo.style.opacity = disabled ? "0.5" : "1";
+    els.centerGo.style.pointerEvents = disabled ? "none" : "auto";
 }
 
 function redraw(){ drawWheel(ctx, wheelCanvas, names, rotation); }
@@ -301,7 +312,7 @@ function spin(){
   spinning = true;
   updateStats();
 
-  const duration = 2200 + Math.random()*900;
+  const duration = getSpinDurationMs();
   const start = performance.now();
   const startRot = rotation;
 
@@ -549,6 +560,14 @@ els.testSoundBtn.addEventListener("click", () => {
   }, 140);
 });
 
+els.spinDurationRange.addEventListener("input", () => {
+  const sec = Number(els.spinDurationRange.value);
+  els.spinDurationValue.textContent = `${sec.toFixed(1)}s`;
+
+  storageRef.value.settings.spinDurationMs = Math.round(sec * 1000);
+  saveStorage(storageRef.value);
+});
+
 // ZIP UI
 els.exportZipBtn.addEventListener("click", () => {
   els.exportBox.classList.toggle("show");
@@ -630,6 +649,8 @@ function init(){
   applyPanelState(storageRef.value);
 
   applySoundSettingsToUI();
+  els.spinDurationRange.value = String((getSpinDurationMs() / 1000).toFixed(1));
+  els.spinDurationValue.textContent = `${Number(els.spinDurationRange.value).toFixed(1)}s`;
   renderNames();
   renderSaved();
   rotation = 0;
