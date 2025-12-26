@@ -17,50 +17,86 @@
   </header>
 
   <main>
-    <!-- Roue -->
-    <section class="card">
-      <div class="hd">
-        <div class="title">Roue</div>
-        <div class="small" id="wheelInfo">—</div>
+    <!-- Carte principale (tabs Roue / Équipes) -->
+    <section class="card" id="mainCard">
+      <div class="hd tabs-hd">
+        <div class="tabs">
+          <button class="tab active" id="tabWheel" type="button">Roue</button>
+          <button class="tab" id="tabTeams" type="button">Équipes</button>
+        </div>
+        <div class="small" id="mainInfo">—</div>
       </div>
 
-      <div class="wheel-wrap">
-        <div class="wheel-area">
-          <div class="pointer" aria-hidden="true"></div>
-          <canvas id="wheel" width="900" height="900"></canvas>
-          <div class="center-cap clickable" id="centerGo" role="button" aria-label="Lancer la roue">GO</div>
-        </div>
+      <!-- VIEW: Roue -->
+      <div id="viewWheel">
+        <div class="wheel-wrap">
+          <div class="wheel-area">
+            <div class="pointer" aria-hidden="true"></div>
+            <canvas id="wheel" width="900" height="900"></canvas>
+            <div class="center-cap clickable" id="centerGo" role="button" aria-label="Lancer la roue">GO</div>
+          </div>
 
-        <div class="btns">
-          <button class="primary" id="spinBtn">Lancer 🎯</button>
-          <button class="danger" id="resetResultBtn" title="Effacer le résultat">Effacer résultat</button>
-        </div>
+          <div class="btns">
+            <button class="primary" id="spinBtn">Lancer 🎯</button>
+            <button class="danger" id="resetResultBtn" title="Effacer le résultat">Effacer résultat</button>
+          </div>
 
-        <div class="row" style="margin-top:6px; width:100%; justify-content:center;">
-          <div style="width:min(520px,100%);">
-            <div class="small" style="margin-bottom:6px;">Durée de rotation</div>
-            <div style="display:flex; gap:10px; align-items:center;">
-              <input id="spinDurationRange" type="range" min="1" max="8" step="0.1" value="2.8" />
-              <div class="pill" id="spinDurationValue">2.8s</div>
+          <!-- durée rotation -->
+          <div class="row" style="margin-top:6px; width:100%; justify-content:center;">
+            <div style="width:min(520px,100%);">
+              <div class="small" style="margin-bottom:6px;">Durée de rotation</div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <input id="spinDurationRange" type="range" min="1" max="8" step="0.1" value="2.8" />
+                <div class="pill" id="spinDurationValue">2.8s</div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="result" role="status" aria-live="polite">
-          <div class="label">Tiré au sort</div>
-          <div class="name" id="resultName">—</div>
+          <div class="result" role="status" aria-live="polite">
+            <div class="label">Tiré au sort</div>
+            <div class="name" id="resultName">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: Équipes -->
+      <div id="viewTeams" style="display:none;">
+        <div class="teams-wrap">
+          <div class="teams-top">
+            <div style="width:100%;">
+              <div class="small" style="margin-bottom:6px;">Personnes par équipe</div>
+
+              <div class="teams-controls">
+                <input id="teamSizeInput" type="number" min="2" max="20" step="1" value="2" />
+                <button class="ok" id="genTeamsBtn" type="button">Générer</button>
+              </div>
+
+              <div class="small" id="teamsHint" style="margin-top:8px;">
+                Utilise la liste de noms à droite.
+              </div>
+
+              <!-- ✅ alerte rouge si non divisible -->
+              <div class="alert" id="teamsAlert" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="teams-board" id="teamsBoard"></div>
+
+          <div class="btns" style="margin-top:12px;">
+            <button class="primary" id="reshuffleTeamsBtn" type="button">Relancer le mélange 🔁</button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Panneau -->
+    <!-- Panneau de droite -->
     <section class="grid">
       <!-- Noms -->
       <section class="card collapsible" data-panel="names">
         <div class="hd collapsible-hd" data-panel="names" role="button" tabindex="0" aria-expanded="true">
           <div class="title">Noms</div>
           <div class="hd-right">
-            <button class="ok" id="addNameBtn">+ Ajouter</button>
+            <button class="ok" id="addNameBtn" type="button">+ Ajouter</button>
             <span class="chev" aria-hidden="true"></span>
           </div>
         </div>
@@ -76,8 +112,8 @@
           <div class="names" id="namesList"></div>
 
           <div class="row" style="margin-top:12px;">
-            <button class="danger" id="clearNamesBtn">Vider la liste</button>
-            <button id="shuffleNamesBtn" title="Mélanger l'ordre des noms">Mélanger</button>
+            <button class="danger" id="clearNamesBtn" type="button">Vider la liste</button>
+            <button id="shuffleNamesBtn" type="button" title="Mélanger l'ordre des noms">Mélanger</button>
           </div>
         </div>
       </section>
@@ -87,7 +123,7 @@
         <div class="hd collapsible-hd" data-panel="sound" role="button" tabindex="0" aria-expanded="true">
           <div class="title">Son</div>
           <div class="hd-right">
-            <button id="testSoundBtn">Tester 🔊</button>
+            <button id="testSoundBtn" type="button">Tester 🔊</button>
             <span class="chev" aria-hidden="true"></span>
           </div>
         </div>
@@ -114,7 +150,6 @@
             </div>
           </div>
 
-          <!-- input file caché (ouvert quand "Ajouter un son…" est choisi) -->
           <input id="customSoundFile" type="file" accept="audio/*" style="display:none;" />
 
           <div class="small" id="customSoundStatus" style="margin-top:10px;">
@@ -129,7 +164,7 @@
           </div>
 
           <div class="small" style="margin-top:10px;">
-            Note : sur mobile, le son ne peut démarrer qu’après une interaction utilisateur (clic/tap). Ici c’est OK via GO / Lancer.
+            Note : sur mobile, le son ne peut démarrer qu’après une interaction utilisateur (clic/tap).
           </div>
         </div>
       </section>
@@ -139,7 +174,7 @@
         <div class="hd collapsible-hd" data-panel="saved" role="button" tabindex="0" aria-expanded="true">
           <div class="title">Roues sauvegardées</div>
           <div class="hd-right">
-            <button class="ok" id="saveWheelBtn">Sauvegarder</button>
+            <button class="ok" id="saveWheelBtn" type="button">Sauvegarder</button>
             <span class="chev" aria-hidden="true"></span>
           </div>
         </div>
@@ -151,12 +186,11 @@
           </div>
 
           <div class="row" style="margin-top:12px;">
-            <button id="exportZipBtn">Exporter ZIP</button>
-            <button id="importZipBtn">Importer ZIP</button>
-            <button class="danger" id="clearSavedBtn">Tout supprimer</button>
+            <button id="exportZipBtn" type="button">Exporter ZIP</button>
+            <button id="importZipBtn" type="button">Importer ZIP</button>
+            <button class="danger" id="clearSavedBtn" type="button">Tout supprimer</button>
           </div>
 
-          <!-- Options export -->
           <div class="export-box" id="exportBox">
             <div class="small"><b>Options d’export ZIP</b></div>
 
@@ -197,15 +231,15 @@
             <div class="wheel-pick" id="wheelPickBox">
               <div class="small"><b>Roulettes à inclure</b> (mode “Sélection”)</div>
               <div class="row" style="margin-top:8px;">
-                <button id="pickAllBtn">Tout cocher</button>
-                <button id="pickNoneBtn">Tout décocher</button>
+                <button id="pickAllBtn" type="button">Tout cocher</button>
+                <button id="pickNoneBtn" type="button">Tout décocher</button>
               </div>
               <div class="list" id="wheelPickList"></div>
             </div>
 
             <div class="row" style="margin-top:10px;">
-              <button class="ok" id="doExportZipBtn">Télécharger le ZIP</button>
-              <button class="danger" id="cancelExportZipBtn">Annuler</button>
+              <button class="ok" id="doExportZipBtn" type="button">Télécharger le ZIP</button>
+              <button class="danger" id="cancelExportZipBtn" type="button">Annuler</button>
             </div>
 
             <div class="small" style="margin-top:8px;">
@@ -214,7 +248,6 @@
           </div>
 
           <input id="zipFileInput" type="file" accept=".zip,application/zip" style="display:none;" />
-
           <div class="saved" id="savedList" style="margin-top:12px;"></div>
         </div>
       </section>

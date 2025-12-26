@@ -6,25 +6,36 @@ export function getEls(){
     spinBtn: $("#spinBtn"),
     resetResultBtn: $("#resetResultBtn"),
     centerGo: $("#centerGo"),
+
+    // tabs + views
+    tabWheel: $("#tabWheel"),
+    tabTeams: $("#tabTeams"),
+    viewWheel: $("#viewWheel"),
+    viewTeams: $("#viewTeams"),
+    mainInfo: $("#mainInfo"),
+
+    // duration
     spinDurationRange: $("#spinDurationRange"),
-  spinDurationValue: $("#spinDurationValue"),
+    spinDurationValue: $("#spinDurationValue"),
 
-
+    // names
     newNameInput: $("#newName"),
     addNameBtn: $("#addNameBtn"),
     clearNamesBtn: $("#clearNamesBtn"),
     shuffleNamesBtn: $("#shuffleNamesBtn"),
-
     namesListEl: $("#namesList"),
+
+    // result + stats
     resultNameEl: $("#resultName"),
     statsPill: $("#statsPill"),
-    wheelInfo: $("#wheelInfo"),
 
+    // saved wheels
     wheelNameInput: $("#wheelName"),
     saveWheelBtn: $("#saveWheelBtn"),
     savedListEl: $("#savedList"),
     clearSavedBtn: $("#clearSavedBtn"),
 
+    // sounds
     spinSoundSelect: $("#spinSoundSelect"),
     winSoundSelect: $("#winSoundSelect"),
     customSoundFile: $("#customSoundFile"),
@@ -33,6 +44,7 @@ export function getEls(){
     volumeRange: $("#volumeRange"),
     testSoundBtn: $("#testSoundBtn"),
 
+    // zip
     exportZipBtn: $("#exportZipBtn"),
     importZipBtn: $("#importZipBtn"),
     exportBox: $("#exportBox"),
@@ -49,5 +61,13 @@ export function getEls(){
     wheelPickList: $("#wheelPickList"),
     pickAllBtn: $("#pickAllBtn"),
     pickNoneBtn: $("#pickNoneBtn"),
+
+    // teams
+    teamSizeInput: $("#teamSizeInput"),
+    genTeamsBtn: $("#genTeamsBtn"),
+    teamsBoard: $("#teamsBoard"),
+    reshuffleTeamsBtn: $("#reshuffleTeamsBtn"),
+    teamsHint: $("#teamsHint"),
+    teamsAlert: $("#teamsAlert"),
   };
 }

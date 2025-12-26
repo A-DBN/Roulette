@@ -13,7 +13,7 @@
 }
 *{box-sizing:border-box}
 
-/* ✅ background global (fix bas de page) */
+/* background global */
 html{
   min-height:100%;
   background:
@@ -29,7 +29,7 @@ body{
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
   color:var(--text);
   background: transparent;
-  color-scheme: dark; /* ✅ selects plus lisibles */
+  color-scheme: dark;
 }
 
 header{
@@ -186,7 +186,7 @@ button:disabled{ opacity:.55; cursor:not-allowed; }
 .grid{ display:grid; grid-template-columns:1fr; gap: var(--gap); }
 .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
-input[type="text"], select, input[type="range"], input[type="file"]{
+input[type="text"], select, input[type="range"], input[type="file"], input[type="number"]{
   width:100%;
   padding:10px 12px;
   border-radius:14px;
@@ -197,7 +197,7 @@ input[type="text"], select, input[type="range"], input[type="file"]{
   font-weight:600;
 }
 
-/* ✅ Fix “options blanches sur gris” */
+/* select option colors */
 select{ background-color: rgba(0,0,0,.18); color: var(--text); }
 select option{ background-color: #0b0d12; color: #e9ecf1; }
 select:focus{ border-color: rgba(122,162,255,.35); }
@@ -332,3 +332,87 @@ input[type="text"]::placeholder{ color: rgba(168,176,191,.75); }
 .card.collapsed .chev::before{ transform: rotate(-45deg); }
 .card.collapsed .bd{ display:none; }
 .card.collapsed .hd{ border-bottom:none; }
+
+/* Tabs header */
+.tabs-hd{ align-items:center; }
+.tabs{ display:flex; gap:8px; align-items:center; }
+.tab{
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  color: rgba(233,236,241,.90);
+  font-weight:800;
+  font-size:13px;
+  cursor:pointer;
+}
+.tab:hover{ background: rgba(255,255,255,.06); }
+.tab.active{
+  background: linear-gradient(180deg, rgba(122,162,255,.22), rgba(122,162,255,.12));
+  border-color: rgba(122,162,255,.35);
+}
+
+/* Teams view */
+.teams-wrap{
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.teams-controls{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+#teamSizeInput{ max-width:140px; }
+
+.teams-board{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+@media(min-width: 520px){
+  .teams-board{ grid-template-columns: 1fr 1fr; }
+}
+.team-card{
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  border-radius:16px;
+  padding:12px;
+}
+.team-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+.team-title .name{ font-weight:900; letter-spacing:.2px; }
+.team-title .count{ font-size:12px; color: var(--muted); }
+.team-members{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.member{
+  padding:10px 10px;
+  border-radius:12px;
+  background: rgba(0,0,0,.12);
+  border:1px solid rgba(255,255,255,.08);
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Alert rouge */
+.alert{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,95,122,.32);
+  background: rgba(255,95,122,.10);
+  color: rgba(255,225,230,.95);
+  font-weight:800;
+  font-size:12px;
+}
